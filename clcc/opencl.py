@@ -256,7 +256,7 @@ class OpenCL:
             return self.get_device_ids(platform)
 
     def create_program_with_source(self, context, code):
-        code_pointer = c_char_p(code)
+        code_pointer = c_char_p(code.encode())
         status = c_int32()
         program = self._create_program_with_source(context, 1, pointer(code_pointer), None, byref(status))
         if status.value != 0:
@@ -264,7 +264,7 @@ class OpenCL:
         return program
 
     def build_program(self, program, device, options):
-        return self._build_program(program, 1, byref(device), c_char_p(options), None, None)
+        return self._build_program(program, 1, byref(device), c_char_p(options.encode()), None, None)
 
     def compile_program(self, program, device, options):
         return self._compile_program(program, 1, byref(device), c_char_p(options), 0, None, None, None, None)
